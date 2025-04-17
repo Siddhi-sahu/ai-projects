@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm src/index.ts",
+    "start": "node --loader ts-node/esm --env-file=.env src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "dotenv": "^16.4.7",
-    "openai": "^4.93.0"
+    "openai": "^4.93.0",
+    "tiktoken": "^1.0.20"
   }
 }
