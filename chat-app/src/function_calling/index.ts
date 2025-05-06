@@ -15,16 +15,35 @@ const getCurrentDateAndTime = () => {
     return date.toLocaleString()
 }
 
+//function with parameters
+const getTaskStatus = (taskId: string) => {
+    console.log("getting task status for task id: ", taskId);
+    if (parseInt(taskId) % 2 === 0) {
+        return "task is completed"
+    } else {
+        return "task pending"
+    }
+}
+
 const callOpenAIWithFunctonCalling = async () => {
     const context: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
         {
             role: "system",
-            content: "you are a helful assistant"
+            content: "Act like a cool bro. You are an assistant who can also give current time and date and task information"
         },
+        //not handling multiple function calls; hard coding
+        // {
+        //     role: "user",
+        //     content: "what is the current date and time, answer in 20 words"
+        // },
+        // {
+        //     role: "user",
+        //     content: "what is the status of task 343",
+        // },
         {
             role: "user",
-            content: "what is the current date and time, answer in 20 words"
-        }
+            content: "what is the status of task 34",
+        },
     ];
 
     const response = await openai.chat.completions.create({
@@ -37,6 +56,23 @@ const callOpenAIWithFunctonCalling = async () => {
                 function: {
                     name: "getCurrentDateAndTime",
                     description: "get the current date and time"
+                }
+            },
+            {
+                type: "function",
+                function: {
+                    name: "getTaskStatus",
+                    description: "get the status of a task",
+                    parameters: {
+                        type: "object",
+                        properties: {
+                            taskId: {
+                                type: "string",
+                                description: "The task ID",
+                            }
+                        },
+                        required: ["taskId"]
+                    }
                 }
             }
         ],
@@ -65,6 +101,21 @@ const callOpenAIWithFunctonCalling = async () => {
 
         if (functionName === "getCurrentDateAndTime") {
             const functionResponse = getCurrentDateAndTime();
+            //we push the response from earlier into the context; this is the response to tell openai to use tools
+            context.push(response.choices[0].message);
+            //we also push the functionresponse into the context
+            context.push({
+                role: "tool",
+                content: functionResponse,
+                tool_call_id: toolCall.id
+            })
+
+        }
+        if (functionName === "getTaskStatus") {
+            //extract the arguments from the tool call
+            const argRaw = toolCall.function.arguments;
+            const parsedArgs = JSON.parse(argRaw);
+            const functionResponse = getTaskStatus(parsedArgs.taskId);
             //we push the response from earlier into the context; this is the response to tell openai to use tools
             context.push(response.choices[0].message);
             //we also push the functionresponse into the context
