@@ -1,17 +1,19 @@
 //generate embeddings through code
 
+//1st => creates a knowledge base of embeddings from text and saves it.
+
 import { readFileSync, writeFileSync } from "fs";
 import OpenAI from "openai";
 import { join } from "path";
 
-type DataWithEmbeddings = {
+export type DataWithEmbeddings = {
     input: string,
     embeddings: number[]
 }
 
 const openai = new OpenAI();
 
-const generateEmbeddings = async (input: string | string[]) => {
+export const generateEmbeddings = async (input: string | string[]) => {
 
     const response = await openai.embeddings.create({
         input: input,
@@ -25,7 +27,7 @@ const generateEmbeddings = async (input: string | string[]) => {
 };
 
 //function to load the input
-const loadInputJson = <T>(filename: string): T => {
+export const loadInputJson = <T>(filename: string): T => {
     //dirname is the current directory name
     const path = join(__dirname, filename);
     //read file data
@@ -53,16 +55,16 @@ const saveEmbeddingToJson = (embeddings: any, filename: string) => {
 }
 
 const main = async () => {
-    const input = loadInputJson<string[]>("input.json");
+    const input = loadInputJson<string[]>("inputStatements.json");
     const embeddings = await generateEmbeddings(input);
 
-    const embeddingsWithData: DataWithEmbeddings[] = input.map((input, index) => ({
+    const dataWithEmbeddings: DataWithEmbeddings[] = input.map((input, index) => ({
         input,
         embeddings: embeddings.data[index].embedding
     }))
 
-    saveEmbeddingToJson(embeddingsWithData, "embeddingsWithData.json");
+    saveEmbeddingToJson(dataWithEmbeddings, "embeddingsWithData2.json");
 }
 
-main();
+// main();
 // generateEmbeddings("he")
