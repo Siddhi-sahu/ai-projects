@@ -66,5 +66,5 @@ const main = async () => {
     saveEmbeddingToJson(dataWithEmbeddings, "embeddingsWithData2.json");
 }
 
-// main();
+main();
 // generateEmbeddings("he")

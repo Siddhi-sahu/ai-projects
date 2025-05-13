@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node -r ts-node/register --env-file=.env src/embeddings/similiarity.ts",
+    "start": "node -r ts-node/register --env-file=.env src/embeddings/RecommenSystem/FoodRec.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
