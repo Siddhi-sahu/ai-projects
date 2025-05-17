@@ -11,7 +11,7 @@
                 "--env-file=.env"
             ],
             "args": [
-                "${workspaceFolder}/src/function_calling/index.ts"
+                "${workspaceFolder}/src/chroma-DB/FaqChatBot.ts"
             ],
             "cwd": "${workspaceFolder}",
             "env": {
