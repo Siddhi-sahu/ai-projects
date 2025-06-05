@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node -r ts-node/register --env-file=.env src/basicRAG/PdfLoader.ts"
+    "start": "node -r ts-node/register --env-file=.env src/basicRAG/PdfLoaderChroma.ts"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,7 @@
     "@langchain/community": "^0.3.45",
     "@langchain/core": "^0.3.57",
     "cheerio": "^1.0.0",
+    "chromadb": "^1.8.1",
     "langchain": "^0.3.26",
     "pdf-parse": "^1.1.1"
   },
